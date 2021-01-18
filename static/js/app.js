@@ -1,4 +1,5 @@
 var meta_data = []
+var samples_data = []
 
 /* Initializing objects where the results will be displayed*/
 //Panel 
@@ -15,6 +16,7 @@ d3.json("../../data/samples.json").then(function(bacteriaData) {
 
     //Assigning json metadata record to a dictionary
     meta_data = bacteriaData.metadata
+    samples_data = bacteriaData.samples
 
     console.log("Adentro " + meta_data.length)
     let selectList = d3.select('#selDataset')
@@ -40,45 +42,61 @@ function optionChanged(choice_id){
     //Clearing all previous Results
     clearResults()
  
+    /*DEMOGRAPHIC INFO*/
     //Getting the record from metadata corresponding to the user's selected id
-    var records = meta_data.filter(rec=>rec.id== parseInt(choice_id))
-
+    let metadata_rec = meta_data.filter(rec=>rec.id== parseInt(choice_id))
 
     //Displaying info according the selected option 
-    records.forEach(function (record){
-        console.log (`Record ${ record.id}`)
-        /*DEMOGRAPHIC INFO*/
-    
-    
-    panel_body.append('p').text("id : "+ record.id)
-    panel_body.append('p').text("ethnicity : "+record.ethnicity)
-    panel_body.append('p').text("gender : "+record.gender)
-    panel_body.append('p').text("age : "+record.age)
-    panel_body.append('p').text("location : "+record.location)
-    panel_body.append('p').text("bbtype : "+record.bbtype)
-    panel_body.append('p').text("wfreq : "+record.wfreq)
+    metadata_rec.forEach(function (record){
+        //console.log (`Record ${ record.id}`)
+        panel_body.append('p').text("id : "+ record.id)
+        panel_body.append('p').text("ethnicity : "+record.ethnicity)
+        panel_body.append('p').text("gender : "+record.gender)
+        panel_body.append('p').text("age : "+record.age)
+        panel_body.append('p').text("location : "+record.location)
+        panel_body.append('p').text("bbtype : "+record.bbtype)
+        panel_body.append('p').text("wfreq : "+record.wfreq)
+    })
 
     /*BAR CHART*/ 
+    let samples_rec = samples_data.filter(rec=>rec.id == choice_id)
+    let otu_ids = []
+    let sample_values = []
+    let otu_labels = []
 
+    samples_rec.map(function (record) {
+
+        //otu_ids, sample_values, otu_labels
+        otu_ids = record.otu_ids.slice(0,10)
+        sample_values = record.sample_values.slice(0,10)
+        otu_labels = record.otu_labels.slice(0,10)
+    }
+    )
+
+    console.log("otu_ids "+otu_ids)
+
+     /*BUBBLE*/
 
 
     /*GAUGE*/
 
-    /*BUBBLE*/
-    
-    })
-
-
-    function clearResults(){
-        //Removing all previous Demographic info
-        panel_body.selectAll('p').remove()
-    }
-
+   
 
     
-    
+}
 
-
+/**
+* Clear all previous results when selecting a new individual id
+*/
+function clearResults(){
+    //Removing all previous Demographic info
+    panel_body.selectAll("p").remove()
+    //Bar chart
+    bar.selectAll("#bar").remove()
+    //Gauge chart
+    gauge.selectAll("#gauge").remove()
+    //Bubble chart
+    bubble.selectAll("#bubble").remove()
 }
 
 
