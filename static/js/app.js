@@ -58,7 +58,7 @@ function optionChanged(choice_id){
         panel_body.append('p').text("wfreq : "+record.wfreq)
     })
 
-    /*BAR CHART*/ 
+   //Retrieving chart data
     let samples_rec = samples_data.filter(rec=>rec.id == choice_id)
     let otu_ids = []
     let sample_values = []
@@ -67,22 +67,33 @@ function optionChanged(choice_id){
     samples_rec.map(function (record) {
 
         //otu_ids, sample_values, otu_labels
-        otu_ids = record.otu_ids.slice(0,10)
+        otu_ids_ = record.otu_ids.slice(0,10)
         sample_values = record.sample_values.slice(0,10)
         otu_labels = record.otu_labels.slice(0,10)
     }
     )
 
-    console.log("otu_ids "+otu_ids)
+    //Adding 'OTU' legend
+    for(let i=0; i<10;i++)
+    {
+        otu_ids[i] = "OTU "+otu_ids_[i];
+    }
+
+
+    console.log("otu ids "+otu_ids)
+    console.log("sample values "+sample_values)
+    console.log("otu labels "+otu_labels)
+
+
+     /*BAR CHART*/ 
+    paint_barChart(otu_ids,sample_values, otu_labels);
+
 
      /*BUBBLE*/
-
+    paint_bubbleChart();
 
     /*GAUGE*/
-
-   
-
-    
+ 
 }
 
 /**
@@ -99,12 +110,48 @@ function clearResults(){
     bubble.selectAll("#bubble").remove()
 }
 
+/**
+ * Draw bar chart of top 10 bacteria within user selection
+ * @param {string array} otu_ids 
+ * @param {string array} sample_values 
+ * @param {string array} otu_labels 
+ */
+function paint_barChart(otu_ids,sample_values, otu_labels){
+    var data = [
+        {
+          "x": sample_values.reverse(),
+          "y": otu_ids.reverse(),
+          "type": 'bar',
+          "orientation": 'h',
+          "text": otu_labels
+        }
+      ];
 
+    var layout = {
+        title: 'Bar Chart',
+        /*xaxis1: {
+            range: [0, 200],
+            zeroline: false,
+            showticklabels: true,
+            showgrid: true
+          },
+        bargap: 0.05
+        yaxis: {
+            title: 'Departments',
+            dtick: 1
+          },*/
+       
+    };
+    
+      
+    Plotly.newPlot('bar', data, layout); 
 
+}
 
+function paint_bubbleChart(){
 
+}
 
-//console.log(demog_labels)
 
 
 
