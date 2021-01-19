@@ -73,7 +73,7 @@ function optionChanged(choice_id){
     }
     )
 
-    //Adding 'OTU' legend
+    //Adding 'OTU' legend to otu ids
     for(let i=0; i<10;i++)
     {
         otu_ids[i] = "OTU "+otu_ids_[i];
