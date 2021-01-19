@@ -4,12 +4,7 @@ var samples_data = []
 /* Initializing objects where the results will be displayed*/
 //Panel 
 let panel_body = d3.select("#sample-metadata")
-//Bar chart
-let bar = d3.select("#bar")
-//Gauge chart
-let gauge = d3.select("#gauge")
-//Bubble chart
-let bubble = d3.select("#bubble")
+
 
 //Allocating individual's ids to be selected in dropdown menu
 d3.json("../../data/samples.json").then(function(bacteriaData) {
@@ -18,7 +13,7 @@ d3.json("../../data/samples.json").then(function(bacteriaData) {
     meta_data = bacteriaData.metadata
     samples_data = bacteriaData.samples
 
-    console.log("Adentro " + meta_data.length)
+    //Getting dropdown to append option list of ids as list of value option
     let selectList = d3.select('#selDataset')
 
     //Adding list of ids to select option
@@ -39,16 +34,20 @@ d3.json("../../data/samples.json").then(function(bacteriaData) {
  */
 function optionChanged(choice_id){
   
-    //Clearing all previous Results
+    //Clearing all previous Results before displaying current results
     clearResults()
  
     /*DEMOGRAPHIC INFO*/
     //Getting the record from metadata corresponding to the user's selected id
     let metadata_rec = meta_data.filter(rec=>rec.id== parseInt(choice_id))
 
-    //Displaying info according the selected option 
+    //Washing frequency value to be used in gauge chart
+    let washing_freq = 0.0;
+
+    //Displaying info according the selected option in panel body. It's only one record
     metadata_rec.forEach(function (record){
-        //console.log (`Record ${ record.id}`)
+        washing_freq = record.wfreq
+
         panel_body.append('p').text("id : "+ record.id)
         panel_body.append('p').text("ethnicity : "+record.ethnicity)
         panel_body.append('p').text("gender : "+record.gender)
@@ -58,7 +57,8 @@ function optionChanged(choice_id){
         panel_body.append('p').text("wfreq : "+record.wfreq)
     })
 
-   //Retrieving chart data
+    /* DISPLAYING CHARTS*/
+   //Retrieving chart data into arrays
     let samples_rec = samples_data.filter(rec=>rec.id == choice_id)
     let otu_ids = []
     let sample_values = []
@@ -83,30 +83,28 @@ function optionChanged(choice_id){
     //console.log("sample values "+sample_values)
     //console.log("otu labels "+otu_labels)
 
-
      /*BAR CHART*/ 
     paint_barChart(otu_ids_labels,sample_values, otu_labels);
-
 
      /*BUBBLE*/
     paint_bubbleChart(otu_ids,sample_values, otu_labels);
 
     /*GAUGE*/
- 
+    paint_gaugeChart(washing_freq);
 }
 
 /**
-* Clear all previous results when selecting a new individual id
+* Clear all previous results already displayed in page when selecting a new individual id
 */
 function clearResults(){
     //Removing all previous Demographic info
     panel_body.selectAll("p").remove()
     //Bar chart
-    bar.selectAll("#bar").remove()
+    d3.select("#bar").selectAll("#bar").remove()
     //Gauge chart
-    gauge.selectAll("#gauge").remove()
+    d3.select("#gauge").selectAll("#gauge").remove()
     //Bubble chart
-    bubble.selectAll("#bubble").remove()
+    d3.select("#bubble").selectAll("#bubble").remove()
 }
 
 /**
@@ -160,6 +158,31 @@ function paint_bubbleChart(otu_ids,sample_values, otu_labels){
     };
       
     Plotly.newPlot('bubble', data, layout);
+}
+
+/**
+ * 
+ */
+function paint_gaugeChart(washing_freq){
+    var data = [
+        {
+            domain: { x: [0, 1], y: [0, 1] },
+            value: washing_freq,
+            title: { text: "Belly Button Washing Frequency" },
+            type: "indicator",
+            mode: "gauge",
+            range: [0, 9]
+           // text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9']
+        }
+    ];
+    
+    var layout = { width: 500, height: 400, 
+        margin: { t: 1, b: 1} ,
+        xaxis: {
+            range: [0, 9]
+          }
+    };
+    Plotly.newPlot('gauge', data, layout);
 }
 
 
