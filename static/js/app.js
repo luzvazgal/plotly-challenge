@@ -163,7 +163,8 @@ function paint_bubbleChart(otu_ids,sample_values, otu_labels){
 }
 
 /**
- * 
+ * Function to display gauge chart
+ * @param {float} washing_freq Washing hands frequency of selected individual. it displays a gauge chart
  */
 function paint_gaugeChart(washing_freq){
     var data = [
@@ -172,9 +173,9 @@ function paint_gaugeChart(washing_freq){
             value: washing_freq,
             title: { text: "Belly Button Washing Frequency" },
             type: "indicator",
-            mode: "gauge",
-            range: [0, 9]
-           // text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9']
+            mode: "gauge+number",
+            range: [0, 9],
+            
         }
     ];
     
