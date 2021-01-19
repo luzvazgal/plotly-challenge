@@ -50,7 +50,10 @@ All charts are updated every time the user changes selection in dropdown list.
 
 ## Deployment
 
-Deploy your app to a free static page hosting service, such as GitHub Pages:
+App is deployed using a free static page hosting service, such as GitHub Pages:
+
+
+
 
 ## Hints
 
