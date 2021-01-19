@@ -79,10 +79,9 @@ function optionChanged(choice_id){
         otu_ids_labels[i] = "OTU "+otu_ids[i];
     }
 
-
-    console.log("otu ids "+otu_ids)
-    console.log("sample values "+sample_values)
-    console.log("otu labels "+otu_labels)
+    //console.log("otu ids "+otu_ids)
+    //console.log("sample values "+sample_values)
+    //console.log("otu labels "+otu_labels)
 
 
      /*BAR CHART*/ 
@@ -111,7 +110,7 @@ function clearResults(){
 }
 
 /**
- * Draw bar chart of top 10 bacteria within user selection
+ * Draws bar chart of top 10 bacteria within user selection
  * @param {string array} otu_ids 
  * @param {string array} sample_values 
  * @param {string array} otu_labels 
@@ -135,6 +134,12 @@ function paint_barChart(otu_ids,sample_values, otu_labels){
 
 }
 
+/**
+ * Draws bubble chart using all otu_ids, sample values, and otu labels for a given individual
+ * @param {string array} otu_ids 
+ * @param {string array} sample_values 
+ * @param {string array} otu_labels 
+ */
 function paint_bubbleChart(otu_ids,sample_values, otu_labels){
     var data = [
         {
@@ -142,9 +147,10 @@ function paint_bubbleChart(otu_ids,sample_values, otu_labels){
         y: sample_values,
         mode: 'markers',
         marker: {
-            color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
+            //color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
+            color: otu_ids,
             opacity: [1, 0.8, 0.6, 0.4],
-            size: [40, 60, 80, 100]
+            size: sample_values,
         }
     }
     ];
