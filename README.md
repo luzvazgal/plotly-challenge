@@ -50,9 +50,7 @@ All charts are updated every time the user changes selection in dropdown list.
 
 ## Deployment
 
-App is deployed using a free static page hosting service, such as GitHub Pages:
-
-
+App is deployed using a free static page hosting service, such as GitHub Pages. This site is allocated in https://luzvazgal.github.io/
 
 
 ## Hints
