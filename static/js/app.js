@@ -63,20 +63,20 @@ function optionChanged(choice_id){
     let otu_ids = []
     let sample_values = []
     let otu_labels = []
+    let otu_ids_labels = []
 
     samples_rec.map(function (record) {
-
         //otu_ids, sample_values, otu_labels
-        otu_ids_ = record.otu_ids.slice(0,10)
-        sample_values = record.sample_values.slice(0,10)
-        otu_labels = record.otu_labels.slice(0,10)
+        otu_ids = record.otu_ids
+        sample_values = record.sample_values
+        otu_labels = record.otu_labels
     }
     )
 
     //Adding 'OTU' legend to otu ids
     for(let i=0; i<10;i++)
     {
-        otu_ids[i] = "OTU "+otu_ids_[i];
+        otu_ids_labels[i] = "OTU "+otu_ids[i];
     }
 
 
@@ -86,11 +86,11 @@ function optionChanged(choice_id){
 
 
      /*BAR CHART*/ 
-    paint_barChart(otu_ids,sample_values, otu_labels);
+    paint_barChart(otu_ids_labels,sample_values, otu_labels);
 
 
      /*BUBBLE*/
-    paint_bubbleChart();
+    paint_bubbleChart(otu_ids,sample_values, otu_labels);
 
     /*GAUGE*/
  
@@ -119,37 +119,41 @@ function clearResults(){
 function paint_barChart(otu_ids,sample_values, otu_labels){
     var data = [
         {
-          "x": sample_values.reverse(),
-          "y": otu_ids.reverse(),
+          "x": sample_values.slice(0,10).reverse(),
+          "y": otu_ids.slice(0,10).reverse(),
           "type": 'bar',
           "orientation": 'h',
-          "text": otu_labels
+          "text": otu_labels.slice(0,10)
         }
       ];
 
     var layout = {
-        title: 'Bar Chart',
-        /*xaxis1: {
-            range: [0, 200],
-            zeroline: false,
-            showticklabels: true,
-            showgrid: true
-          },
-        bargap: 0.05
-        yaxis: {
-            title: 'Departments',
-            dtick: 1
-          },*/
-       
+        title: 'Bar Chart'   
     };
-    
       
     Plotly.newPlot('bar', data, layout); 
 
 }
 
-function paint_bubbleChart(){
+function paint_bubbleChart(otu_ids,sample_values, otu_labels){
+    var data = [
+        {
+        x: otu_ids,
+        y: sample_values,
+        mode: 'markers',
+        marker: {
+            color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
+            opacity: [1, 0.8, 0.6, 0.4],
+            size: [40, 60, 80, 100]
+        }
+    }
+    ];
 
+    var layout = {
+        title: 'Bubble Chart'   
+    };
+      
+    Plotly.newPlot('bubble', data, layout);
 }
 
 
