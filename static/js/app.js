@@ -33,6 +33,8 @@ d3.json("../../data/samples.json").then(function(bacteriaData) {
  * @param {string} choice_id 
  */
 function optionChanged(choice_id){
+
+    console.log(choice_id)
   
     //Clearing all previous Results before displaying current results
     clearResults()
@@ -79,9 +81,9 @@ function optionChanged(choice_id){
         otu_ids_labels[i] = "OTU "+otu_ids[i];
     }
 
-    //console.log("otu ids "+otu_ids)
-    //console.log("sample values "+sample_values)
-    //console.log("otu labels "+otu_labels)
+    console.log("otu ids "+otu_ids)
+    console.log("sample values "+sample_values)
+    console.log("otu labels "+otu_labels)
 
      /*BAR CHART*/ 
     paint_barChart(otu_ids_labels,sample_values, otu_labels);
